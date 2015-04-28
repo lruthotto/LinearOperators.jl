@@ -4,8 +4,10 @@ module LinearOperators
 using Compat  # for Nullable types.
 
 # Setup for documentation
-using Docile
-@docstrings(manual = ["../doc/manual.md"])
+if VERSION < v"0.4.0-dev"
+  using Docile
+  eval(:(@docstrings(manual = ["../doc/manual.md"])))  # Macro nonsense.
+end
 
 export LinearOperator, opEye, opOnes, opZeros, opDiagonal,
        opInverse, opCholesky, opHouseholder, opHermitian,
@@ -35,10 +37,10 @@ end
 
 import Base.size
 
-@doc meta("Return the size of a linear operator as a tuple", returns=(Int,Int)) ->
+@doc "Return the size of a linear operator as a tuple" ->
 size(op :: LinearOperator) = (op.nrow, op.ncol)
 
-@doc meta("Return the size of a linear operator along dimension `d`", returns=(Int,)) ->
+@doc "Return the size of a linear operator along dimension `d`" ->
 function size(op :: LinearOperator, d :: Int)
   if d == 1
     return op.nrow;
@@ -52,10 +54,10 @@ end
 @doc "An alias for size" ->
 shape(op :: LinearOperator) = size(op)
 
-@doc meta("Determine whether the operator is Hermitian", returns=(Bool,)) ->
+@doc "Determine whether the operator is Hermitian" ->
 hermitian(op :: LinearOperator) = op.hermitian
 
-@doc meta("Determine whether the operator is symmetric", returns=(Bool,)) ->
+@doc "Determine whether the operator is symmetric" ->
 symmetric(op :: LinearOperator) = op.symmetric
 
 
